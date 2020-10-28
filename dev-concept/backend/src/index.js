@@ -1,10 +1,34 @@
 const express = require('express');
-const { uuid } = require('uuidv4')
+const { v4: uuidv4, validate: uuidValidate } = require('uuid');
 
 const app = express();
 app.use(express.json());
 
 const projects = [];
+
+function logRequest(request, response, next) {
+  const { method, url } = request;
+
+  const logLabel = `[${method.toUpperCase()}] ${url}`;
+
+  console.time(logLabel);
+
+  next(); // Next middleware
+
+  console.timeEnd(logLabel);
+}
+
+function validateProjectId(request, response, next) {
+  const { id } = request.params;
+
+  if (!uuidValidate(id))
+    return response.status(400).json({ error: 'Invalid project ID.' })
+
+  return next();
+}
+
+app.use(logRequest);
+app.use('/projects/:id', validateProjectId);
 
 app.get('/projects', (request, response) => {
   const { title } = request.query;
@@ -17,7 +41,7 @@ app.get('/projects', (request, response) => {
 app.post('/projects', (request, response) => {
   const { title, owner } = request.body;
 
-  const project = { id: uuid(), title, owner };
+  const project = { id: uuidv4(), title, owner };
 
   projects.push(project);
 
