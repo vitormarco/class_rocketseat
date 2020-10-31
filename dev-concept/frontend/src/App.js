@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import api from './service/api';
+
 import './App.css'
 import backgroundImage from './assets/background.jpg'
 
