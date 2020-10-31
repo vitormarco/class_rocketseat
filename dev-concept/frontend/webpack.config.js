@@ -26,6 +26,12 @@ module.exports = {
           { loader: 'style-loader' }, // ler arquivos css e ler as importações (imagens em background por exemplo)
           { loader: 'css-loader' }, // Vai pegar o css e vai injetar
         ]
+      },
+      {
+        test: /.*\.(gif|png|jpe?g)$/i,
+        use: {
+          loader: 'file-loader',
+        }
       }
     ]
   },
