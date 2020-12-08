@@ -3,12 +3,6 @@ import { startOfHour } from 'date-fns';
 import Appointment from '../models/Appointment';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
-/**
- * [x] Recebimento das informações
- * [/] Tratativa de erros/excessões
- * [x] Acesso ao repositório
- */
-
 interface Request {
   provider: string;
   date: Date;
