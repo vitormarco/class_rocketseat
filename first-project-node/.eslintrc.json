@@ -31,7 +31,8 @@
         }
       ],
       "no-use-before-define": "off",
-      "prettier/prettier": "error"
+      "prettier/prettier": "error",
+      "eslint-disable class-methods-use-this": "false"
     },
     "settings": {
       "import/resolver": {
