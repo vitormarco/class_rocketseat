@@ -23,16 +23,17 @@
         "prettier"
     ],
     "rules": {
+      "no-use-before-define": "off",
+      "prettier/prettier": "error",
+      "class-methods-use-this": "off",
+      "@typescript-eslint/camelcase": "off",
       "import/extensions": [
         "error",
         "ignorePackages",
         {
           "ts": "never"
         }
-      ],
-      "no-use-before-define": "off",
-      "prettier/prettier": "error",
-      "class-methods-use-this": "off"
+      ]
     },
     "settings": {
       "import/resolver": {
