@@ -3,3 +3,4 @@ yarn.lock*
 bundle.js*
 dist*
 .vscode*
+**/auth.ts*
