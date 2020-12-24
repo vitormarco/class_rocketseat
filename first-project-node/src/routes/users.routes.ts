@@ -37,27 +37,23 @@ usersRouter.patch(
   ensureAuthenticated,
   upload.single('avatar'),
   async (request, response) => {
-    try {
-      const updateUserAvatar = new UpdateUserAvatarService();
+    const updateUserAvatar = new UpdateUserAvatarService();
 
-      const user = await updateUserAvatar.execute({
-        userId: request.user.id,
-        avatarFilename: request.file.filename,
-      });
+    const user = await updateUserAvatar.execute({
+      userId: request.user.id,
+      avatarFilename: request.file.filename,
+    });
 
-      const userWithoutPassword = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        avatar: user.avatar,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
-      };
+    const userWithoutPassword = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+    };
 
-      return response.status(200).json(userWithoutPassword);
-    } catch (err) {
-      return response.status(err.statusCode).json({ error: err.message });
-    }
+    return response.status(200).json(userWithoutPassword);
   },
 );
 
