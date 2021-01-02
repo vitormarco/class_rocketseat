@@ -1,63 +1,79 @@
-import React from 'react';
+import React, { useState, FormEvent } from 'react';
 
 import { FiChevronRight } from 'react-icons/fi';
+
+import api from '../../services/api';
+
 import logoImg from '../../assets/logo.svg';
 
-import { Title, Form, Repositories } from './styles';
+import { Title, Form, Repositories, Error } from './styles';
+
+interface Repository {
+  description: string;
+  full_name: string;
+  owner: {
+    login: string;
+    avatar_url: string;
+  };
+}
 
 const Dashboard: React.FC = () => {
+  const [newRepo, setNewRepo] = useState('');
+  const [inputError, setInputError] = useState('');
+  const [repositories, setRepositories] = useState<Repository[]>([]);
+
+  const handleAddRepository = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    event.preventDefault();
+
+    if (!newRepo) {
+      setInputError('Digite o autor/nome do repositório');
+      return;
+    }
+
+    try {
+      const response = await api.get<Repository>(`repos/${newRepo}`);
+
+      const repository = response.data;
+
+      setRepositories([...repositories, repository]);
+      setNewRepo('');
+      setInputError('');
+    } catch {
+      setInputError('Erro na busca por esse repositório');
+    }
+  };
+
   return (
     <>
       <img src={logoImg} alt="Github Explore" />
       <Title>Explore repositórios no Github</Title>
-      <Form>
-        <input placeholder="Digite o nome do repositório" />
+      <Form hasError={!!inputError} onSubmit={handleAddRepository}>
+        <input
+          value={newRepo}
+          onChange={e => setNewRepo(e.target.value)}
+          placeholder="Digite o nome do repositório"
+        />
         <button type="submit">Pesquisar</button>
       </Form>
 
+      {inputError && <Error>{inputError}</Error>}
+
       <Repositories>
-        <a href="teste">
-          <img
-            src="https://avatars1.githubusercontent.com/u/31700114?s=460&u=2b889643a8867d50d688453c76aebe18c095d1ce&v=4"
-            alt="Vítor Marco"
-          />
-          <div>
-            <strong>rocketseat/unform</strong>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-              eleifend lacus vel urna varius, eu bibendum nisl commodo.
-            </p>
-          </div>
-          <FiChevronRight size={50} />
-        </a>
-        <a href="teste">
-          <img
-            src="https://avatars1.githubusercontent.com/u/31700114?s=460&u=2b889643a8867d50d688453c76aebe18c095d1ce&v=4"
-            alt="Vítor Marco"
-          />
-          <div>
-            <strong>rocketseat/unform</strong>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-              eleifend lacus vel urna varius, eu bibendum nisl commodo.
-            </p>
-          </div>
-          <FiChevronRight size={50} />
-        </a>
-        <a href="teste">
-          <img
-            src="https://avatars1.githubusercontent.com/u/31700114?s=460&u=2b889643a8867d50d688453c76aebe18c095d1ce&v=4"
-            alt="Vítor Marco"
-          />
-          <div>
-            <strong>rocketseat/unform</strong>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-              eleifend lacus vel urna varius, eu bibendum nisl commodo.
-            </p>
-          </div>
-          <FiChevronRight size={50} />
-        </a>
+        {repositories.map(repository => (
+          <a href="teste" key={repository.full_name}>
+            <img
+              src={repository.owner.avatar_url}
+              alt={repository.owner.login}
+            />
+            <div>
+              <strong>{repository.full_name}</strong>
+              <p>{repository.description}</p>
+            </div>
+            <FiChevronRight size={20} />
+          </a>
+        ))}
       </Repositories>
     </>
   );
