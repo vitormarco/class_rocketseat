@@ -6,3 +6,4 @@ dist*
 **/auth.ts*
 **/temp/*
 !**/temp/.gitkeep
+**.eslintcache
