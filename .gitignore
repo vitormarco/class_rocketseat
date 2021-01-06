@@ -3,7 +3,7 @@ yarn.lock*
 bundle.js*
 dist*
 .vscode*
-**/auth.ts*
+**/config/auth.ts*
 **/temp/*
 !**/temp/.gitkeep
 **.eslintcache
