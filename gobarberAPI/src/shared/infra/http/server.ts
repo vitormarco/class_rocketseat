@@ -13,8 +13,6 @@ import '@shared/container';
 
 const app = express();
 
-console.log('here');
-
 app.use((req, res, next) => {
   next();
 }, cors());
