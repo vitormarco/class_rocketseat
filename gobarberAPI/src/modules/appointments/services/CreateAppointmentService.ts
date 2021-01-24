@@ -40,7 +40,6 @@ class CreateAppointmentService {
       );
     }
 
-    console.log(appointmentDate);
     const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
       appointmentDate,
     );
