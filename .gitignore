@@ -8,6 +8,6 @@ dist*
 !**/temp/.gitkeep
 **.eslintcache
 **/covarage
-.env*
+**.env
 !.env.example
 **ormconfig.json
