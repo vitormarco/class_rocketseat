@@ -9,3 +9,5 @@ dist*
 **.eslintcache
 **/covarage
 .env*
+!.env.example
+**ormconfig.json
