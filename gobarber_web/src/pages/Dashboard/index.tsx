@@ -9,6 +9,7 @@ import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { FiClock, FiPower } from 'react-icons/fi';
 
+import { Link } from 'react-router-dom';
 import {
   Container,
   Header,
@@ -103,7 +104,7 @@ const Dashboard: React.FC = () => {
       addToast({
         type: 'error',
         title: 'Ocorreu um erro ao buscar os dias disponiveis',
-        description: err.response.data.message,
+        description: err.response?.data.message,
       });
     }
   }, [currentMonth, user.id, addToast]);
@@ -149,7 +150,7 @@ const Dashboard: React.FC = () => {
             <img src={user.avatar_url} alt={user.name} />
             <div>
               <span>Bem-vindo,</span>
-              <strong>{user.name}</strong>
+              <Link to="/profile"><strong>{user.name}</strong></Link>
             </div>
           </Profile>
           <button type="button" onClick={signOut}>
