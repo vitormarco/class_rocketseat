@@ -1,6 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import IUserRepository from '../repositories/IUsersRepository';
 
@@ -22,6 +23,9 @@ class UpdateProfileService {
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -65,6 +69,8 @@ class UpdateProfileService {
         password: await this.hashProvider.generateHash(password),
       });
     }
+
+    await this.cacheProvider.invalidatePrefix('providers-list');
 
     return this.usersRepository.save(user);
   }
