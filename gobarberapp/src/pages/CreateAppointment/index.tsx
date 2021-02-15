@@ -10,6 +10,11 @@ import {
   BackButton,
   HeaderTitle,
   UserAvatar,
+  ProvidersListContainer,
+  ProvidersList,
+  ProviderContainer,
+  ProviderAvatar,
+  ProviderName,
 } from './styles';
 
 import { Provider } from '../Dashboard';
@@ -20,8 +25,6 @@ interface RouteParams {
 }
 
 const CreateAppointment: React.FC = () => {
-  const [providers, setProviders] = useState<Provider[]>([]);
-
   const { user } = useAuth();
   const route = useRoute();
   const { goBack } = useNavigation();
@@ -29,6 +32,9 @@ const CreateAppointment: React.FC = () => {
   const { providerId } = useMemo(() => route.params as RouteParams, [
     route.params,
   ]);
+
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [selectedProvider, setSelectedProvider] = useState(providerId);
 
   const getProvidersList = useCallback(async () => {
     try {
@@ -40,6 +46,10 @@ const CreateAppointment: React.FC = () => {
         err?.response?.data?.message,
       );
     }
+  }, []);
+
+  const handleSelectProvider = useCallback((provider_id: string) => {
+    setSelectedProvider(provider_id);
   }, []);
 
   useEffect(() => {
@@ -61,6 +71,26 @@ const CreateAppointment: React.FC = () => {
 
         <UserAvatar source={{ uri: user.avatar_url }} />
       </Header>
+
+      <ProvidersListContainer>
+        <ProvidersList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={providers}
+          keyExtractor={provider => provider.id}
+          renderItem={({ item: provider }) => (
+            <ProviderContainer
+              onPress={() => handleSelectProvider(provider.id)}
+              selected={provider.id === selectedProvider}
+            >
+              <ProviderAvatar source={{ uri: provider.avatar_url }} />
+              <ProviderName selected={provider.id === selectedProvider}>
+                {provider.name}
+              </ProviderName>
+            </ProviderContainer>
+          )}
+        />
+      </ProvidersListContainer>
     </Container>
   );
 };
