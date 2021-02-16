@@ -30,6 +30,11 @@ interface RouteParams {
   providerId: string;
 }
 
+interface AvailabilityItem {
+  hour: number;
+  available: boolean;
+}
+
 const CreateAppointment: React.FC = () => {
   const { user } = useAuth();
   const route = useRoute();
@@ -43,6 +48,7 @@ const CreateAppointment: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [providers, setProviders] = useState<Provider[]>([]);
   const [selectedProvider, setSelectedProvider] = useState(providerId);
+  const [availability, setAvailability] = useState<AvailabilityItem[]>([]);
 
   const handleSelectProvider = useCallback((provider_id: string) => {
     setSelectedProvider(provider_id);
@@ -52,7 +58,7 @@ const CreateAppointment: React.FC = () => {
     setShowDatePicker(oldState => !oldState);
   }, []);
 
-  const handleDateChange = useCallback((event: any, date: Date) => {
+  const handleDateChange = useCallback((event: EventTarget, date: Date) => {
     if (Platform.OS === 'android') {
       setShowDatePicker(false);
     }
@@ -78,9 +84,33 @@ const CreateAppointment: React.FC = () => {
     getProvidersList();
   }, [getProvidersList]);
 
-  const navigateBack = useCallback(() => goBack(), [goBack]);
+  const getDayAvailability = useCallback(async () => {
+    try {
+      const { data } = await api.get(
+        `/providers/${selectedProvider}/day-availability`,
+        {
+          params: {
+            year: selectedDate.getFullYear(),
+            month: selectedDate.getMonth() + 1,
+            day: selectedDate.getDate(),
+          },
+        },
+      );
 
-  console.log(providerId);
+      setAvailability(data);
+    } catch (err) {
+      Alert.alert(
+        'Ocorreu um erro ao buscar os dias disponíveis',
+        err?.response?.data?.message,
+      );
+    }
+  }, [selectedDate, selectedProvider]);
+
+  useEffect(() => {
+    getDayAvailability();
+  }, [getDayAvailability]);
+
+  const navigateBack = useCallback(() => goBack(), [goBack]);
 
   return (
     <Container>
