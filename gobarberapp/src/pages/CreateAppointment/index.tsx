@@ -116,7 +116,7 @@ const CreateAppointment: React.FC = () => {
         date,
       });
 
-      navigate('ApointmentCreated', { date: date.getTime() });
+      navigate('AppointmentCreated', { date: date.getTime() });
     } catch (err) {
       Alert.alert(
         'Ocorreu um erro ao cadastrar um agendamento',
