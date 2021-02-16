@@ -47,7 +47,8 @@ const SignUp: React.FC = () => {
   const handleGoBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
-  const handleSignUp = useCallback(
+
+  const handleUpdateUser = useCallback(
     async (data: ProfileFormData) => {
       try {
         formRef.current?.setErrors({});
@@ -116,7 +117,7 @@ const SignUp: React.FC = () => {
         );
       }
     },
-    [navigation],
+    [navigation, updateUser],
   );
 
   return (
@@ -146,7 +147,7 @@ const SignUp: React.FC = () => {
             <Form
               initialData={{ name: user.name, email: user.email }}
               ref={formRef}
-              onSubmit={handleSignUp}
+              onSubmit={handleUpdateUser}
               style={{ width: '100%' }}
             >
               <Input
